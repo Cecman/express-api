@@ -33,7 +33,7 @@ app.get("/api/courses/:id", (req, res) => {
   });
 
   if (!foundElement) {
-    res.status(404).send("The course with the given ID was not found");
+    return res.status(404).send("The course with the given ID was not found");
   } else {
     res.send(foundElement);
   }
@@ -43,8 +43,7 @@ app.post("/api/courses", (req, res) => {
   const { error } = validateCourse(req.body);
 
   if (error) {
-    res.status(400).send(error.details[0].message);
-    return;
+    return res.status(400).send(error.details[0].message);
   }
   const course = {
     id: courses.length + 1,
@@ -59,20 +58,33 @@ app.put("/api/courses/:id", (req, res) => {
   const findCourse = courses.find((course) => {
     return parseInt(req.params.id) === course.id;
   });
-
   if (!findCourse) {
-    res.status(404).send("The course specified does not exist");
+    return res.status(404).send("The course specified does not exist");
   }
 
   //   const result = validateCourse(req.body);
   const { error } = validateCourse(req.body);
 
   if (error) {
-    res.status(400).send(error.details[0].message);
-    return;
+    return res.status(400).send(error.details[0].message);
   }
 
   findCourse.name = req.body.name;
+  res.send(findCourse);
+});
+
+app.delete("/api/courses/:id", (req, res) => {
+  const findCourse = courses.find((course) => {
+    return parseInt(req.params.id) === course.id;
+  });
+
+  if (!findCourse) {
+    return res.status(404).send("The course specified does not exist");
+  }
+
+  const index = courses.indexOf(findCourse);
+  courses.splice(index, 1);
+
   res.send(findCourse);
 });
 
