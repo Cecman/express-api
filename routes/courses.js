@@ -4,6 +4,8 @@ const Joi = require("joi");
 
 const router = express.Router();
 
+console.log(courses);
+
 function validateCourse(course) {
   const schema = Joi.object({
     name: Joi.string().min(3).required(),
