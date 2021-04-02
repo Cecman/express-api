@@ -1,7 +1,8 @@
 const config = require("config");
-const debug = require("debug")("app:startup");
 const express = require("express");
+const mongoose = require("./db/connection");
 const courses = require("./routes/courses");
+let CourseSchema = require("./db/models/courses");
 const home = require("./routes/home");
 const helmet = require("helmet");
 const app = express();
@@ -12,8 +13,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(helmet());
-debug(`${config.get("mail.host")}`);
-debug(`${config.get("mail.password")}`);
+
+let CourseSchema = require("./db/models/courses");
+const course = new CourseSchema({
+  name: "Node.js Course",
+  author: "Maaaaosh",
+  tags: ["node", "backend"],
+  isPublished: true,
+});
+//course.save();
 
 app.use("/api/courses", courses);
 app.use("/", home);
