@@ -1,5 +1,5 @@
 {
-  "name": "My API - Production",
+  "name": "Express Api - Production",
   "mail": {
     "host": "prod-mail-server"
   }

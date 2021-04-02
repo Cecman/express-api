@@ -1,10 +1,11 @@
 const express = require("express");
 const courses = require("../data/coursesData");
+const debugerData = require("debug")("app:datadebuger"); //needs DEBUG (env variable) set to this namespace to work
 const Joi = require("joi");
 
 const router = express.Router();
 
-console.log(courses);
+debugerData(courses);
 
 function validateCourse(course) {
   const schema = Joi.object({
@@ -52,7 +53,6 @@ router.put("/:id", (req, res) => {
     return res.status(404).send("The course specified does not exist");
   }
 
-  //   const result = validateCourse(req.body);
   const { error } = validateCourse(req.body);
 
   if (error) {
