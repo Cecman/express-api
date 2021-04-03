@@ -14,14 +14,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(helmet());
 
-let CourseSchema = require("./db/models/courses");
-const course = new CourseSchema({
-  name: "Node.js Course",
-  author: "Maaaaosh",
-  tags: ["node", "backend"],
-  isPublished: true,
-});
-//course.save();
+
+
 
 app.use("/api/courses", courses);
 app.use("/", home);

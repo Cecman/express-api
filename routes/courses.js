@@ -1,15 +1,19 @@
 const express = require("express");
-const courses = require("../data/coursesData");
+const CourseSchema = require("../db/models/courses");
+const dbConnection = require("../db/connection");
 const debugerData = require("debug")("app:datadebuger"); //needs DEBUG (env variable) set to this namespace to work
 const Joi = require("joi");
 
 const router = express.Router();
 
-debugerData(courses);
+// debugerData(courses);
 
 function validateCourse(course) {
   const schema = Joi.object({
     name: Joi.string().min(3).required(),
+    author: Joi.string().min(3).required(),
+    tags: Joi.array().items(Joi.string()),
+    isPublished: Joi.boolean(),
   });
   return schema.validate(course);
 }
@@ -36,12 +40,14 @@ router.post("/", (req, res) => {
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
-  const course = {
-    id: courses.length + 1,
-    name: req.body.name,
-  };
 
-  courses.push(course);
+  const course = new CourseSchema({
+    name: req.body.name,
+    author: req.body.author,
+    tags: [req.body.tags[0], req.body.tags[1]],
+    isPublished: req.body.isPublished,
+  });
+  course.save();
   res.send(course);
 });
 
