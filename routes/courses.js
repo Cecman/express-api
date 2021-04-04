@@ -21,7 +21,7 @@ function validateCourse(course) {
 router.get("/", (req, res) => {
   CourseSchema.find({}, (err, allCourses) => {
     if (err) {
-      console.log(err);
+      res.status(400).send(new Error(err));
     }
     res.send(allCourses);
   });
@@ -30,8 +30,9 @@ router.get("/", (req, res) => {
 router.get("/:name", (req, res) => {
   CourseSchema.find({ name: req.params.name }, (err, foundCourses) => {
     if (err) {
-      console.log(err);
+      res.status(400).send(new Error(err));
     }
+
     res.send(foundCourses);
   });
   // let foundElement = courses.find((c) => {
@@ -62,23 +63,37 @@ router.post("/", (req, res) => {
   res.send(course);
 });
 
-router.put("/:id", (req, res) => {
-  const findCourse = courses.find((course) => {
-    return parseInt(req.params.id) === course.id;
-  });
-  if (!findCourse) {
-    return res.status(404).send("The course specified does not exist");
-  }
+router.put("/:name", (req, res) => {
+  const query = { name: req.params.name };
+  CourseSchema.updateOne(
+    query,
+    { name: req.body.name, author: req.body.author, tags: [...req.body.tags] },
+    (err, result) => {
+      if (err) {
+        res.status(400).send(new Error(err));
+      }
+      res.send(result);
+    }
+  );
 
-  const { error } = validateCourse(req.body);
+  // const findCourse = courses.find((course) => {
+  //   return parseInt(req.params.id) === course.id;
+  // });
+  // if (!findCourse) {
+  //   return res.status(404).send("The course specified does not exist");
+  // }
 
-  if (error) {
-    return res.status(400).send(error.details[0].message);
-  }
+  // const { error } = validateCourse(req.body);
 
-  findCourse.name = req.body.name;
-  res.send(findCourse);
+  // if (error) {
+  //   return res.status(400).send(error.details[0].message);
+  // }
+
+  // findCourse.name = req.body.name;
+  // res.send(findCourse);
 });
+
+// router.patch("/:name", (req, res) => {});
 
 router.delete("/:id", (req, res) => {
   const findCourse = courses.find((course) => {
