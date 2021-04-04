@@ -92,7 +92,19 @@ router.put("/:name", (req, res) => {
   // findCourse.name = req.body.name;
   // res.send(findCourse);
 });
-
+router.patch("/:name", (req, res) => {
+  const query = { name: req.params.name };
+  CourseSchema.updateMany(
+    query,
+    { name: req.body.name, author: req.body.author, tags: [...req.body.tags] },
+    (err, result) => {
+      if (err) {
+        res.status(400).send(new Error(err));
+      }
+      res.send(result);
+    }
+  );
+});
 // router.patch("/:name", (req, res) => {});
 
 router.delete("/:id", (req, res) => {
