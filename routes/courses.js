@@ -35,15 +35,6 @@ router.get("/:name", (req, res) => {
 
     res.send(foundCourses);
   });
-  // let foundElement = courses.find((c) => {
-  //   return parseInt(req.params.id) === c.id;
-  // });
-
-  // if (!foundElement) {
-  //   return res.status(404).send("The course with the given ID was not found");
-  // } else {
-  //   res.send(foundElement);
-  // }
 });
 
 router.post("/", (req, res) => {
@@ -75,22 +66,6 @@ router.put("/:name", (req, res) => {
       res.send(result);
     }
   );
-
-  // const findCourse = courses.find((course) => {
-  //   return parseInt(req.params.id) === course.id;
-  // });
-  // if (!findCourse) {
-  //   return res.status(404).send("The course specified does not exist");
-  // }
-
-  // const { error } = validateCourse(req.body);
-
-  // if (error) {
-  //   return res.status(400).send(error.details[0].message);
-  // }
-
-  // findCourse.name = req.body.name;
-  // res.send(findCourse);
 });
 router.patch("/:name", (req, res) => {
   const query = { name: req.params.name };
@@ -107,19 +82,18 @@ router.patch("/:name", (req, res) => {
 });
 // router.patch("/:name", (req, res) => {});
 
-router.delete("/:id", (req, res) => {
-  const findCourse = courses.find((course) => {
-    return parseInt(req.params.id) === course.id;
-  });
-
-  if (!findCourse) {
-    return res.status(404).send("The course specified does not exist");
-  }
-
-  const index = courses.indexOf(findCourse);
-  courses.splice(index, 1);
-
-  res.send(findCourse);
+router.delete("/:name", (req, res) => {
+  CourseSchema.deleteOne(
+    {
+      name: req.params.name,
+    },
+    (err, deletedResult) => {
+      if (err) {
+        res.status(400).send(new Error(err));
+      }
+      res.send(deletedResult);
+    }
+  );
 });
 
 module.exports = router;
