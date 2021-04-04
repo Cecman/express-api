@@ -19,19 +19,30 @@ function validateCourse(course) {
 }
 
 router.get("/", (req, res) => {
-  res.send(courses);
+  CourseSchema.find({}, (err, allCourses) => {
+    if (err) {
+      console.log(err);
+    }
+    res.send(allCourses);
+  });
 });
 
-router.get("/:id", (req, res) => {
-  let foundElement = courses.find((c) => {
-    return parseInt(req.params.id) === c.id;
+router.get("/:name", (req, res) => {
+  CourseSchema.find({ name: req.params.name }, (err, foundCourses) => {
+    if (err) {
+      console.log(err);
+    }
+    res.send(foundCourses);
   });
+  // let foundElement = courses.find((c) => {
+  //   return parseInt(req.params.id) === c.id;
+  // });
 
-  if (!foundElement) {
-    return res.status(404).send("The course with the given ID was not found");
-  } else {
-    res.send(foundElement);
-  }
+  // if (!foundElement) {
+  //   return res.status(404).send("The course with the given ID was not found");
+  // } else {
+  //   res.send(foundElement);
+  // }
 });
 
 router.post("/", (req, res) => {
@@ -44,7 +55,7 @@ router.post("/", (req, res) => {
   const course = new CourseSchema({
     name: req.body.name,
     author: req.body.author,
-    tags: [req.body.tags[0], req.body.tags[1]],
+    tags: [req.body.tags[0], ...req.body.tags],
     isPublished: req.body.isPublished,
   });
   course.save();

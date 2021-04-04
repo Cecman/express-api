@@ -8,6 +8,6 @@ const courseSchema = new mongoose.Schema({
   isPublished: Boolean,
 });
 
-const Course = mongoose.model("course", courseSchema);
+// const Course = mongoose.model("course", courseSchema);
 
 module.exports = mongoose.model('Course', courseSchema);
