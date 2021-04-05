@@ -1,6 +1,7 @@
 const config = require("config");
 const express = require("express");
 require("./db/connection");
+const error = require("./middleware/error");
 const courses = require("./routes/courses");
 const home = require("./routes/home");
 const helmet = require("helmet");
@@ -16,6 +17,8 @@ app.use(helmet());
 //routers
 app.use("/api/courses", courses);
 app.use("/", home);
+
+app.use(error);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);

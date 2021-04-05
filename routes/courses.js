@@ -1,5 +1,5 @@
 const express = require("express");
-
+const asyncMiddleware = require("../middleware/async");
 const {
   allCoursesHandler,
   specificCourseHandler,
@@ -8,17 +8,16 @@ const {
   updateOneCourseHandler,
   deleteCourseHandler,
   setOneCourseHandler,
-
 } = require("./handlers/courseHandlers");
 
 const router = express.Router();
 
-router.get("/", allCoursesHandler);
-router.get("/:name", specificCourseHandler);
-router.post("/", createCourseHandler);
-router.put("/:name", updateOneCourseHandler);
-router.put("/:name", updateManyCourseHandler);
-router.patch("/:name", setOneCourseHandler);
-router.delete("/:name", deleteCourseHandler);
+router.get("/", asyncMiddleware(allCoursesHandler));
+router.get("/:name", asyncMiddleware(specificCourseHandler));
+router.post("/", asyncMiddleware(createCourseHandler));
+router.put("/:name", asyncMiddleware(updateOneCourseHandler));
+router.put("/update/:name", asyncMiddleware(updateManyCourseHandler));
+router.patch("/:name", asyncMiddleware(setOneCourseHandler));
+router.delete("/:name", asyncMiddleware(deleteCourseHandler));
 
 module.exports = router;
