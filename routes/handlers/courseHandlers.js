@@ -1,8 +1,7 @@
-const express = require("express");
 const CourseSchema = require("../../db/models/courses");
 const Joi = require("joi");
 
-function validateCourse(course) {
+const validateCourse = (course) => {
   const schema = Joi.object({
     name: Joi.string().min(3).required(),
     author: Joi.string().min(3).required(),
@@ -10,7 +9,7 @@ function validateCourse(course) {
     isPublished: Joi.boolean(),
   });
   return schema.validate(course);
-}
+};
 
 const allCoursesHandler = (req, res) => {
   CourseSchema.find({}, (err, allCourses) => {
@@ -41,9 +40,10 @@ const createCourseHandler = (req, res) => {
   const course = new CourseSchema({
     name: req.body.name,
     author: req.body.author,
-    tags: [req.body.tags[0], ...req.body.tags],
+    tags: [...req.body.tags],
     isPublished: req.body.isPublished,
   });
+
   course.save();
   res.send(course);
 };

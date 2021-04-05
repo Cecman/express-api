@@ -1,8 +1,7 @@
 const config = require("config");
 const express = require("express");
-const mongoose = require("./db/connection");
+require("./db/connection");
 const courses = require("./routes/courses");
-let CourseSchema = require("./db/models/courses");
 const home = require("./routes/home");
 const helmet = require("helmet");
 const app = express();
@@ -14,9 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(helmet());
 
-
-
-
+//routers
 app.use("/api/courses", courses);
 app.use("/", home);
 

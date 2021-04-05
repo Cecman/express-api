@@ -1,5 +1,5 @@
 const express = require("express");
-const dbConnection = require("../db/connection");
+
 const {
   allCoursesHandler,
   specificCourseHandler,
