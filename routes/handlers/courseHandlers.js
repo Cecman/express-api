@@ -1,15 +1,5 @@
 const CourseSchema = require("../../db/models/courses");
-const Joi = require("joi");
-
-const validateCourse = (course) => {
-  const schema = Joi.object({
-    name: Joi.string().min(3).required(),
-    author: Joi.string().min(3).required(),
-    tags: Joi.array().items(Joi.string()).required(),
-    isPublished: Joi.boolean(),
-  });
-  return schema.validate(course);
-};
+const validator = require("../../middleware/inputValidation");
 
 const allCoursesHandler = async (req, res) => {
   const courses = await CourseSchema.find();
@@ -25,7 +15,7 @@ const specificCourseHandler = async (req, res) => {
 };
 
 const createCourseHandler = async (req, res) => {
-  const { error } = validateCourse(req.body);
+  const { error } = validator(req.body);
 
   if (error) {
     return res.status(400).json(error.details[0].message);
@@ -40,8 +30,6 @@ const createCourseHandler = async (req, res) => {
 
   const result = await course.save();
   res.send(result);
-
-  res.status(500).send("Oops, something went wrong...");
 };
 
 const updateOneCourseHandler = async (req, res) => {
