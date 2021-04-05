@@ -12,27 +12,28 @@ const validateCourse = (course) => {
 };
 
 const allCoursesHandler = async (req, res) => {
-  CourseSchema.find({}, (err, allCourses) => {
-    if (err) {
-      res.status(400).send(new Error(err));
-    }
-    res.send(allCourses);
-  }).select({ name: 1, author: 1, tags: 1, isPublished: 1 });
+  try {
+    const courses = await CourseSchema.find();
+    res.send(courses);
+  } catch (err) {
+    res.status(500).send("Oops, something went wrong...");
+  }
 };
 
-const specificCourseHandler = (req, res) => {
-  CourseSchema.find({ name: req.params.name }, (err, foundCourses) => {
-    if (err) {
-      res.status(400).send(new Error(err));
+const specificCourseHandler = async (req, res) => {
+  try {
+    const foundCourse = await CourseSchema.find({ name: req.params.name });
+    if (foundCourse.length < 1) {
+      return res.status(404).send("The specified course was not found");
     }
-
-    res.send(foundCourses);
-  });
+    res.send(foundCourse);
+  } catch (err) {
+    res.status(500).send("Oops, something went wrong...");
+  }
 };
 
 const createCourseHandler = async (req, res) => {
   const { error } = validateCourse(req.body);
-  
 
   if (error) {
     return res.status(400).json(error.details[0].message);
@@ -49,7 +50,7 @@ const createCourseHandler = async (req, res) => {
     const result = await course.save();
     res.send(result);
   } catch (err) {
-    res.status(500).send("Something went wrong");
+    res.status(500).send("Oops, something went wrong...");
   }
 };
 
@@ -60,7 +61,7 @@ const updateOneCourseHandler = (req, res) => {
     { name: req.body.name, author: req.body.author, tags: [...req.body.tags] },
     (err, result) => {
       if (err) {
-        res.status(400).send(new Error(err));
+        return res.status(400).send(new Error(err));
       }
       res.send(result);
     }
@@ -74,7 +75,7 @@ const updateManyCourseHandler = (req, res) => {
     { name: req.body.name, author: req.body.author, tags: [...req.body.tags] },
     (err, result) => {
       if (err) {
-        res.status(400).send(new Error(err));
+        return res.status(400).send(new Error(err));
       }
       res.send(result);
     }
@@ -84,12 +85,12 @@ const updateManyCourseHandler = (req, res) => {
 const setOneCourseHandler = async (req, res) => {
   CourseSchema.find({ name: req.params.name }, (err, result) => {
     if (!result) {
-      res
+      return res
         .status(404)
         .send(new Error("The course with the specified name was not found"));
     }
     if (result.isPublished) {
-      res
+      return res
         .status(403)
         .send(new Error("Unable to change the published state of the course"));
     }
@@ -113,7 +114,6 @@ const setOneCourseHandler = async (req, res) => {
   });
 };
 
-const setManyCourseHandler = () => {};
 
 const deleteCourseHandler = (req, res) => {
   CourseSchema.deleteOne(
@@ -122,7 +122,7 @@ const deleteCourseHandler = (req, res) => {
     },
     (err, deletedResult) => {
       if (err) {
-        res.status(400).send(new Error(err));
+        return res.status(400).send(new Error(err));
       }
       res.send(deletedResult);
     }
