@@ -7,6 +7,8 @@ const {
   updateManyCourseHandler,
   updateOneCourseHandler,
   deleteCourseHandler,
+  setOneCourseHandler,
+
 } = require("./handlers/courseHandlers");
 
 const router = express.Router();
@@ -15,7 +17,8 @@ router.get("/", allCoursesHandler);
 router.get("/:name", specificCourseHandler);
 router.post("/", createCourseHandler);
 router.put("/:name", updateOneCourseHandler);
-router.patch("/:name", updateManyCourseHandler);
+router.put("/:name", updateManyCourseHandler);
+router.patch("/:name", setOneCourseHandler);
 router.delete("/:name", deleteCourseHandler);
 
 module.exports = router;
