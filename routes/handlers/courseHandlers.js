@@ -114,19 +114,18 @@ const setOneCourseHandler = async (req, res) => {
   });
 };
 
-
-const deleteCourseHandler = (req, res) => {
-  CourseSchema.deleteOne(
-    {
+const deleteCourseHandler = async (req, res) => {
+  try {
+    const result = await CourseSchema.findOneAndDelete({
       name: req.params.name,
-    },
-    (err, deletedResult) => {
-      if (err) {
-        return res.status(400).send(new Error(err));
-      }
-      res.send(deletedResult);
+    });
+    if (!result) {
+      return res.status(404).send("No such course found");
     }
-  );
+    res.send(result);
+  } catch (err) {
+    res.status(500).send("Oops, something went wrong...");
+  }
 };
 
 module.exports = {
