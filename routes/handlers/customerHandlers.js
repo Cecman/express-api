@@ -43,7 +43,21 @@ const updateCustomersHandler = async (req, res) => {
   res.send(foundCustomer);
 };
 
-const deleteCustomerHandler = async () => {};
+const deleteCustomerHandler = async (req, res) => {
+  const deleted = await CustomerSchema.findOneAndDelete({
+    name: req.params.name,
+  });
+
+  if (!deleted) {
+    return res
+      .status(404)
+      .send(
+        `There is no one with the name ${req.params.name} in our database...`
+      );
+  }
+
+  res.send(deleted);
+};
 
 module.exports = {
   getCustomersHandler,
