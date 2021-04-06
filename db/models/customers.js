@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const CustomersSchema = new mongoose.Schema({
-  isGold: Boolean,
-  name: String,
-  phone: Number,
+  isGold: { type: Boolean, default: false },
+  name: { type: String, required: true, minlength: 3 },
+  phone: { type: String, required: true, minlength: 5 },
 });
 
 module.exports = mongoose.model("Customer", CustomersSchema);

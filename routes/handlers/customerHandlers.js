@@ -2,7 +2,7 @@ const CustomerSchema = require("../../db/models/customers");
 const validator = require("../../middleware/customerValidation");
 
 const getCustomersHandler = async (req, res) => {
-  const customers = await CustomerSchema.find();
+  const customers = await CustomerSchema.find().sort("name");
   res.send(customers);
 };
 
@@ -23,6 +23,10 @@ const createCustomerHandler = async (req, res) => {
 };
 
 const updateCustomersHandler = async (req, res) => {
+  const { error } = validator(req.body);
+  if (error) {
+    return res.status(400).json(error.details[0].message);
+  }
   const query = { name: req.params.name };
   const foundCustomer = await CustomerSchema.updateOne(query, {
     name: req.body.name,
