@@ -93,7 +93,7 @@ const deleteCourseHandler = async (req, res) => {
   }
   res.send(result);
 
-  res.status(500).send("Oops, something went wrong...");
+ // res.status(500).send("Oops, something went wrong...");
 };
 
 const deleteManyCoursesHandler = async (req, res) => {
