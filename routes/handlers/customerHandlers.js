@@ -22,7 +22,26 @@ const createCustomerHandler = async (req, res) => {
   res.send(result);
 };
 
-const updateCustomersHandler = async () => {};
+const updateCustomersHandler = async (req, res) => {
+  const query = { name: req.params.name };
+  const foundCustomer = await CustomerSchema.updateOne(query, {
+    name: req.body.name,
+    isGold: req.body.isGold,
+    phone: req.body.phone,
+  });
+
+  console.log(foundCustomer.n);
+
+  if (foundCustomer.n < 1) {
+    return res
+      .status(404)
+      .send(
+        `We have no customer with the name ${req.params.name} in our database`
+      );
+  }
+
+  res.send(foundCustomer);
+};
 
 const deleteCustomerHandler = async () => {};
 
