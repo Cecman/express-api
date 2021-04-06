@@ -1,6 +1,7 @@
 const config = require("config");
 const express = require("express");
 require("./db/connection");
+require("express-async-errors");
 const error = require("./middleware/error");
 const courses = require("./routes/courses");
 const home = require("./routes/home");

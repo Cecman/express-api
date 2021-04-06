@@ -95,6 +95,15 @@ const deleteCourseHandler = async (req, res) => {
   res.status(500).send("Oops, something went wrong...");
 };
 
+const deleteManyCoursesHandler = async (req, res) => {
+  const courseName = req.params.name;
+  const result = await CourseSchema.deleteMany({ name: courseName });
+  if (result.length < 1) {
+    return res.status(404).send(`No courses named ${courseName} were found`);
+  }
+  res.send(result);
+};
+
 module.exports = {
   allCoursesHandler,
   specificCourseHandler,
@@ -103,4 +112,5 @@ module.exports = {
   updateManyCourseHandler,
   deleteCourseHandler,
   setOneCourseHandler,
+  deleteManyCoursesHandler,
 };
