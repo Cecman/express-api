@@ -6,10 +6,10 @@ const {
   deleteCustomerHandler,
 } = require("./handlers/customerHandlers");
 
-const router = express.router();
+const router = express.Router();
 
 router.get("/", getCustomersHandler);
-router.post("/create/customer/:name", createCustomerHandler);
+router.post("/create/customer/", createCustomerHandler);
 router.put("/update/customer/:name", updateCustomersHandler);
 router.delete("/delete/customer/:name", deleteCustomerHandler);
 
