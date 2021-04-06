@@ -26,6 +26,7 @@ const createCourseHandler = async (req, res) => {
     author: req.body.author,
     tags: [...req.body.tags],
     isPublished: req.body.isPublished,
+    price: req.body.price,
   });
 
   const result = await course.save();

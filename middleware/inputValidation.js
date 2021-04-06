@@ -6,6 +6,7 @@ module.exports = (course) => {
     author: Joi.string().min(3).required(),
     tags: Joi.array().items(Joi.string()).required(),
     isPublished: Joi.boolean(),
+    price: Joi.number().required(),
   });
   return schema.validate(course);
 };
