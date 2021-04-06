@@ -1,7 +1,10 @@
 const CustomerSchema = require("../../db/models/customers");
 const validator = require("../../middleware/customerValidation");
 
-const getCustomersHandler = async () => {};
+const getCustomersHandler = async (req, res) => {
+  const customers = await CustomerSchema.get();
+  res.send(customers);
+};
 
 const createCustomerHandler = async () => {};
 
