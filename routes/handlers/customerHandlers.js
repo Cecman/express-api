@@ -3,6 +3,9 @@ const validator = require("../../middleware/customerValidation");
 
 const getCustomersHandler = async (req, res) => {
   const customers = await CustomerSchema.find().sort("name");
+  if (customers.length < 1) {
+    return res.status(404).send("No customers were found");
+  }
   res.send(customers);
 };
 

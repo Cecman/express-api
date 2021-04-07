@@ -4,6 +4,9 @@ const validator = require("../../middleware/inputValidation");
 
 const allCoursesHandler = async (req, res) => {
   const courses = await CourseSchema.find();
+  if (courses.length < 1) {
+    return res.status(404).send("No courses were found");
+  }
   res.send(courses);
 };
 
@@ -36,6 +39,12 @@ const createCourseHandler = async (req, res) => {
 };
 
 const updateOneCourseHandler = async (req, res) => {
+  const { error } = validator(req.body);
+
+  if (error) {
+    return res.status(400).json(error.details[0].message);
+  }
+
   const query = { name: req.params.name };
   const updated = await CourseSchema.updateOne(query, {
     name: req.body.name,
