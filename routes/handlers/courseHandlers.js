@@ -3,7 +3,7 @@ const { Category } = require("../../db/models/category");
 const validator = require("../../middleware/inputValidation");
 
 const allCoursesHandler = async (req, res) => {
-  const courses = await CourseSchema.find();
+  const courses = await CourseSchema.find().select('-__v -_id');
   if (courses.length < 1) {
     return res.status(404).send("No courses were found");
   }
@@ -95,6 +95,22 @@ const setOneCourseHandler = async (req, res) => {
   res.send(course);
 };
 
+// const setCategoryHandler = async (req, res) => {
+//   const query = { name: req.params.name };
+//   const course = await CourseSchema.find(query);
+
+//   console.log(course[0].category.name);
+//   const updated = await CourseSchema.updateOne(course.category.name, {
+//     category: req.body.category,
+//   });
+
+//   res.send(course);
+//   // const updated = await Category.updateOne(query, {
+//   //   category: req.body.category,
+//   // });
+//   // res.send(updated);
+// };
+
 const deleteCourseHandler = async (req, res) => {
   const result = await CourseSchema.findOneAndDelete({
     name: req.params.name,
@@ -125,4 +141,5 @@ module.exports = {
   deleteCourseHandler,
   setOneCourseHandler,
   deleteManyCoursesHandler,
+  //setCategoryHandler,
 };

@@ -2,7 +2,7 @@ const CustomerSchema = require("../../db/models/customers");
 const validator = require("../../middleware/customerValidation");
 
 const getCustomersHandler = async (req, res) => {
-  const customers = await CustomerSchema.find().sort("name");
+  const customers = await CustomerSchema.find().sort("name").select('-__v -_id');
   if (customers.length < 1) {
     return res.status(404).send("No customers were found");
   }
