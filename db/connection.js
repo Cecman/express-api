@@ -5,6 +5,7 @@ mongoose
   .connect(`${process.env.DB}://${process.env.HOST}/${process.env.DB_NAME}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true
   })
   .then(() => {
     console.log("Connected to MongoDB...");

@@ -1,2 +1,10 @@
 # express-api
- building a simple api with Express
+
+API built with express
+
+Endpoints
+
+/api/courses
+/api/customers
+/api/categories
+

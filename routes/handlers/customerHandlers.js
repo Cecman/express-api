@@ -12,7 +12,7 @@ const getCustomersHandler = async (req, res) => {
 const createCustomerHandler = async (req, res) => {
   const { error } = validator(req.body);
   if (error) {
-    return res.status(400).json(error.details[0].message);
+    return res.status(400).send(error.details[0].message);
   }
 
   const customer = new CustomerSchema({
@@ -28,7 +28,7 @@ const createCustomerHandler = async (req, res) => {
 const updateCustomersHandler = async (req, res) => {
   const { error } = validator(req.body);
   if (error) {
-    return res.status(400).json(error.details[0].message);
+    return res.status(400).send(error.details[0].message);
   }
   const query = { name: req.params.name };
   const foundCustomer = await CustomerSchema.updateOne(query, {
