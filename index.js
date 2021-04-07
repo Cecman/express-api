@@ -5,6 +5,7 @@ require("express-async-errors");
 const error = require("./middleware/error");
 const courses = require("./routes/courses");
 const customers = require("./routes/customers");
+const categories = require("./routes/categories");
 const home = require("./routes/home");
 const helmet = require("helmet");
 const app = express();
@@ -19,6 +20,7 @@ app.use(helmet());
 //routers
 app.use("/api/courses", courses);
 app.use("/api/customers", customers);
+app.use("/api/categories", categories);
 app.use("/", home);
 
 app.use(error);

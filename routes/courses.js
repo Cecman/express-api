@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 const {
   allCoursesHandler,
   specificCourseHandler,
@@ -7,10 +8,8 @@ const {
   updateOneCourseHandler,
   deleteCourseHandler,
   setOneCourseHandler,
-  deleteManyCoursesHandler
+  deleteManyCoursesHandler,
 } = require("./handlers/courseHandlers");
-
-const router = express.Router();
 
 router.get("/", allCoursesHandler);
 router.get("/:name", specificCourseHandler);

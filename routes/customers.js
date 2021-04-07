@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 const {
   getCustomersHandler,
   createCustomerHandler,
@@ -6,7 +7,7 @@ const {
   deleteCustomerHandler,
 } = require("./handlers/customerHandlers");
 
-const router = express.Router();
+
 
 router.get("/", getCustomersHandler);
 router.post("/create/customer/", createCustomerHandler);

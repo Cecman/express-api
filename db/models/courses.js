@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { categoriesSchema } = require("./category");
 
 const courseSchema = new mongoose.Schema({
   name: { type: String, required: true, minlength: 3, maxlength: 255 },
@@ -19,6 +20,10 @@ const courseSchema = new mongoose.Schema({
     required: function () {
       return this.isPublished;
     },
+  },
+  category: {
+    type: categoriesSchema,
+    required: true,
   },
 });
 

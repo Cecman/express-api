@@ -1,4 +1,5 @@
 const CourseSchema = require("../../db/models/courses");
+const { Category } = require("../../db/models/category");
 const validator = require("../../middleware/inputValidation");
 
 const allCoursesHandler = async (req, res) => {
@@ -25,6 +26,7 @@ const createCourseHandler = async (req, res) => {
     name: req.body.name,
     author: req.body.author,
     tags: [...req.body.tags],
+    category: new Category({ name: req.body.name }),
     isPublished: req.body.isPublished,
     price: req.body.price,
   });
@@ -93,7 +95,7 @@ const deleteCourseHandler = async (req, res) => {
   }
   res.send(result);
 
- // res.status(500).send("Oops, something went wrong...");
+  // res.status(500).send("Oops, something went wrong...");
 };
 
 const deleteManyCoursesHandler = async (req, res) => {
