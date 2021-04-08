@@ -3,6 +3,11 @@ const validator = require("../../middleware/registerValidation");
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
 
+const getCurrentUser = async (req, res) => {
+  const user = await userSchema.findById(req.user._id).select("-password");
+  res.send(user);
+};
+
 const registerUserHandler = async (req, res) => {
   const { error } = validator(req.body);
   if (error) {
@@ -28,4 +33,4 @@ const registerUserHandler = async (req, res) => {
     .send(_.pick(user, ["_id", "name", "email"]));
 };
 
-module.exports = registerUserHandler;
+module.exports = { registerUserHandler, getCurrentUser };
