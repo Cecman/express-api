@@ -7,4 +7,5 @@ Endpoints
 /api/courses
 /api/customers
 /api/categories
+/api/users
 
