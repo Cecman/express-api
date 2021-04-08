@@ -1,6 +1,7 @@
 const { Category } = require("../../db/models/category");
 const validator = require("../../middleware/categoriesValidator");
 
+
 const getCategoriesHandler = async (req, res) => {
   const categories = await Category.find().select("name -_id");
   if (categories.length < 1) {

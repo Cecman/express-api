@@ -20,14 +20,12 @@ const registerUserHandler = async (req, res) => {
   const user = new userSchema(_.pick(req.body, ["name", "email", "password"]));
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
-
-  // {
-  //   name: req.body.name,
-  //   email: req.body.email,
-  //   password: req.body.password,
-  // }
   await user.save();
-  res.send(_.pick(user, ["_id", "name", "email"]));
+  const token = user.generateAuthToken();
+
+  res
+    .header("x-auth-token", token)
+    .send(_.pick(user, ["_id", "name", "email"]));
 };
 
 module.exports = registerUserHandler;
