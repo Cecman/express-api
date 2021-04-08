@@ -1,5 +1,7 @@
+require("dotenv").config();
 const userSchema = require("../../db/models/register");
 const validator = require("../../middleware/authentication");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const authHandler = async (req, res) => {
@@ -19,7 +21,8 @@ const authHandler = async (req, res) => {
     return res.status(400).send(`Invalid email or password`);
   }
 
-  res.send(true);
+  const token = jwt.sign({ _id: user._id }, process.env.jwtPrivateKey);
+  res.send(token);
 };
 
 module.exports = authHandler;
