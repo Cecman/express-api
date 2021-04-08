@@ -1,6 +1,7 @@
 const CourseSchema = require("../../db/models/courses");
 const { Category } = require("../../db/models/category");
 const validator = require("../../middleware/inputValidation");
+const _ = require('lodash')
 
 const allCoursesHandler = async (req, res) => {
   const courses = await CourseSchema.find().select("-__v -_id");
@@ -29,11 +30,18 @@ const createCourseHandler = async (req, res) => {
     name: req.body.name,
     author: req.body.author,
     tags: [...req.body.tags],
-    category: new Category({ name: req.body.name }),
+    category: new Category({ name: req.body.category }),
     isPublished: req.body.isPublished,
     price: req.body.price,
   });
-
+  // _.pick(req.body, [
+  //   "name",
+  //   "author",
+  //   "tags",
+  //   "category",
+  //   "price",
+  //   "isPublished",
+  // ]
   const result = await course.save();
   res.send(result);
 };
@@ -46,21 +54,19 @@ const updateOneCourseHandler = async (req, res) => {
   }
 
   const query = { name: req.params.name };
-  const updated = await CourseSchema.updateOne(query, {
-    name: req.body.name,
-    author: req.body.author,
-    tags: [...req.body.tags],
-  });
+  const updated = await CourseSchema.updateOne(
+    query,
+    _.pick(req.body, ["name", "author", "tags"])
+  );
   res.send(updated);
 };
 
 const updateManyCourseHandler = async (req, res) => {
   const query = { name: req.params.name };
-  const updated = await CourseSchema.updateMany(query, {
-    name: req.body.name,
-    author: req.body.author,
-    tags: [...req.body.tags],
-  });
+  const updated = await CourseSchema.updateMany(
+    query,
+    _.pick(req.body, ["name", "author", "tags"])
+  );
   res.send(updated);
 };
 
@@ -77,12 +83,15 @@ const setOneCourseHandler = async (req, res) => {
       .send(new Error("Unable to change the published state of the course"));
   }
 
-  const course = new CourseSchema({
-    name: result.name,
-    author: result.author,
-    tags: result.tags,
-    isPublished: result.isPublished,
-  });
+  const course = new CourseSchema(
+    _.pick(req.body, ["name", "author", "tags", "isPublished"])
+  );
+  // {
+  //   name: result.name,
+  //   author: result.author,
+  //   tags: result.tags,
+  //   isPublished: result.isPublished,
+  // }
   if (course.isPublished) {
     res
       .status(403)

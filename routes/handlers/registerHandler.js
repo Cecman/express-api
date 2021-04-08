@@ -1,5 +1,7 @@
 const userSchema = require("../../db/models/register");
 const validator = require("../../middleware/registerValidation");
+const bcrypt = require("bcrypt");
+const _ = require("lodash");
 
 const registerUserHandler = async (req, res) => {
   const { error } = validator(req.body);
@@ -15,14 +17,17 @@ const registerUserHandler = async (req, res) => {
       .send(`There is a user already registered with that email address`);
   }
 
-  const user = new userSchema({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-  });
+  const user = new userSchema(_.pick(req.body, ["name", "email", "password"]));
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
 
-  const result = await user.save();
-  res.send(result);
+  // {
+  //   name: req.body.name,
+  //   email: req.body.email,
+  //   password: req.body.password,
+  // }
+  await user.save();
+  res.send(_.pick(user, ["_id", "name", "email"]));
 };
 
 module.exports = registerUserHandler;

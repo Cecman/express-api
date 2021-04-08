@@ -1,8 +1,11 @@
 const CustomerSchema = require("../../db/models/customers");
 const validator = require("../../middleware/customerValidation");
+const _ = require("lodash");
 
 const getCustomersHandler = async (req, res) => {
-  const customers = await CustomerSchema.find().sort("name").select('-__v -_id');
+  const customers = await CustomerSchema.find()
+    .sort("name")
+    .select("-__v -_id");
   if (customers.length < 1) {
     return res.status(404).send("No customers were found");
   }
@@ -15,11 +18,9 @@ const createCustomerHandler = async (req, res) => {
     return res.status(400).send(error.details[0].message);
   }
 
-  const customer = new CustomerSchema({
-    isGold: req.body.isGold,
-    name: req.body.name,
-    phone: req.body.phone,
-  });
+  const customer = new CustomerSchema(
+    _.pick(req.body, ["name", "phone", "isGold"])
+  );
 
   const result = await customer.save();
   res.send(result);
@@ -31,12 +32,15 @@ const updateCustomersHandler = async (req, res) => {
     return res.status(400).send(error.details[0].message);
   }
   const query = { name: req.params.name };
-  const foundCustomer = await CustomerSchema.updateOne(query, {
-    name: req.body.name,
-    isGold: req.body.isGold,
-    phone: req.body.phone,
-  });
-
+  const foundCustomer = await CustomerSchema.updateOne(
+    query,
+    _.pick(req.body, ["name", "phone", "isGold"])
+  );
+  // {
+  //   name: req.body.name,
+  //   isGold: req.body.isGold,
+  //   phone: req.body.phone,
+  // }
   console.log(foundCustomer.n);
 
   if (foundCustomer.n < 1) {
